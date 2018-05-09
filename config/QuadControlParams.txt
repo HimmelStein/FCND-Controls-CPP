@@ -21,6 +21,7 @@ minMotorThrust = .1
 maxMotorThrust = 4.5
 
 # Position control gains
+<<<<<<< HEAD
 ## 3_PositionControl
 kpPosXY = 2.7849
 # 4_Nonidealities
@@ -51,6 +52,15 @@ kpVelZ = 16
 # 4_Nonidealities
 kpVelZ = 70
 # 5_TrajectoryFollow
+=======
+kpPosXY = 1
+kpPosZ = 1
+KiPosZ = 20
+
+# Velocity control gains
+kpVelXY = 4
+kpVelZ = 4
+>>>>>>> 23c97a6c65e3aa8a06536ec4b784fa3b4298f4b1
 
 # Angle control gains
 ## 3_PositionControl
