@@ -3,7 +3,8 @@
 // "Absolute threshold" trigger/detector
 // Detects if the absolute value of a signal goes below a certain threshold for at least a given time
 // and plots the detection point (different color if quiet time met) 
-
+#include <iostream>
+#include <fstream>
 #include "BaseAnalyzer.h"
 
 class WindowThreshold : public BaseAnalyzer
@@ -25,7 +26,25 @@ public:
       if (_active)
       {
         printf("PASS: ABS(%s) was less than %lf for at least %lf seconds\n", _var.c_str(), _thresh, _minWindow);
-      }
+	cout<<"=====!!!=====================================================\n";
+	 // log file for tuning
+    string logName = "/Users/tdong/git/FCND-Controls-CPP/src/log_kp_pq.txt";
+    ofstream oLFile;
+    oLFile.open(logName, ios::out | ios::app);
+    oLFile << "PASS: ABS"<<_var.c_str()<<" was less than "<< _thresh<<" for at least "<< _minWindow<< "seconds" << std::endl;
+   bool Omega = false;
+   bool Roll = false;
+   if (strcmp(_var.c_str(), "Quad.Omega.X")==0){
+	Omega = true;
+	}
+   if (strcmp(_var.c_str(), "Quad.Roll")==0){
+	Roll = true;
+	}
+   if (Omega && Roll){
+	exit(0); 
+	}
+    //----
+	}
       else
       {
         printf("FAIL: ABS(%s) was less than %lf for %lf seconds, which was less than %lf seconds\n", _var.c_str(), _thresh, _lastTime- _lastTimeAboveThresh, _minWindow);
@@ -101,7 +120,8 @@ public:
 
     if (_active)
     {
-      glColor3f(0, 1, 0);
+     cout<<"=========!!!!======\n";
+	 glColor3f(0, 1, 0);
       glBegin(GL_LINE_STRIP);
       glVertex2f(_lastTimeAboveThresh, CONSTRAIN(_thresh,minY,maxY));
       glVertex2f(_lastTime, CONSTRAIN(_thresh, minY, maxY));

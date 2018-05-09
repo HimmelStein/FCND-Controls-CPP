@@ -24,6 +24,7 @@ Quad.InitialOmega=0,0,0
 Commands.1=AddGraph1.Quad.Pos.Z
 Commands.2=AddGraph1.WindowThreshold(Quad.PosFollowErr,.5,.8)
 
+
 INCLUDE QuadControlParams.txt
 INCLUDE Simulation.txt
 
@@ -33,6 +34,6 @@ kpPosXY = 0
 kpPosZ = 0
 kpVelXY = 0
 kpVelZ = 0
-kpBank = 0
+kpBank = 3
 kpYaw = 0
 kpPQR = 0,0,0

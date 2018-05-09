@@ -28,6 +28,7 @@ Commands.4=AddGraph2.AbsThreshold(Quad.Omega.X,3,0.1)
 Commands.5=AddGraph1.WindowThreshold(Quad.Roll,0.025,0.75)
 Commands.6=AddGraph2.WindowThreshold(Quad.Omega.X,2.5,0.75)
 
+
 INCLUDE QuadControlParams.txt
 INCLUDE Simulation.txt
 

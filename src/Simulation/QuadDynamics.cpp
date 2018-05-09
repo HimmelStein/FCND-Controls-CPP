@@ -200,7 +200,7 @@ void QuadDynamics::Dynamics(float dt, float simTime, V3F external_force, V3F ext
   // constrain the desired thrusts to reflect real-world constraints
   for (int i = 0; i < 4; i++)
   {
-		curCmd.desiredThrustsN[i] = CONSTRAIN(curCmd.desiredThrustsN[i], minMotorThrust, maxMotorThrust);
+	curCmd.desiredThrustsN[i] = CONSTRAIN(curCmd.desiredThrustsN[i], minMotorThrust, maxMotorThrust);
     motorCmdsN(i) = curCmd.desiredThrustsN[i] + randomMotorForceMag * ran1_inRange(-1.f, 1.f, idum);
   }
 

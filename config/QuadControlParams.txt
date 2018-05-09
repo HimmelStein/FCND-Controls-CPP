@@ -9,30 +9,68 @@
 UseIdealEstimator=1
 
 # Physical properties
-Mass = 0.4
+Mass = 0.24
+
 L = 0.17
 Ixx = 0.0023
 Iyy = 0.0023
 Izz = 0.0046
 kappa = 0.016
+minMotorThrust = .001
 minMotorThrust = .1
 maxMotorThrust = 4.5
 
 # Position control gains
-kpPosXY = 1
-kpPosZ = 1
-KiPosZ = 20
+## 3_PositionControl
+kpPosXY = 2.7849
+# 4_Nonidealities
+kpPosXY = 2.74508
+# 5_TrajectoryFollow 5.73127 5.28037
 
-# Velocity control gains
-kpVelXY = 4
-kpVelZ = 4
+## 3_PositionControl
+kpPosZ = 3.7799
+# 4_Nonidealities
+kpPosZ = 340
+# 5_TrajectoryFollow
+
+
+##
+# 4_Nonidealities
+KiPosZ = 600
+# 5_TrajectoryFollow
+
+# Velocity control gains 
+## 3_PositionControl
+ kpVelXY = 1.2998
+# 4_Nonidealities
+kpVelXY = 1.57
+# 5_TrajectoryFollow 3.37604
+
+## 3_PositionControl
+kpVelZ = 16
+# 4_Nonidealities
+kpVelZ = 70
+# 5_TrajectoryFollow
 
 # Angle control gains
-kpBank = 5
-kpYaw = 1
+## 3_PositionControl
+kpBank = 10
+# 4_Nonidealities
+kpBank = 7
+# 5_TrajectoryFollow
+
+## 3_PositionControl
+kpYaw = 2
+##4_Nonidealities
+kpYaw = 10
+## 5_TrajectoryFollow
 
 # Angle rate gains
-kpPQR = 23, 23, 5
+## 3_PositionControl
+kpPQR = 30, 30 , 5
+## 4_Nonidealities
+kpPQR = 145, 37, 5
+# 5_TrajectoryFollow 
 
 # limits
 maxAscentRate = 5

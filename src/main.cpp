@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Common.h"
 #include "Trajectory.h"
 #include "Utility/Timer.h"
@@ -37,7 +38,8 @@ int randomNumCarry=-1;
 void OnTimer(int v);
 
 vector<QuadcopterHandle> CreateVehicles();
-string _scenarioFile="../config/1_Intro.txt";
+// string _scenarioFile="../config/1_Intro.txt";
+string _scenarioFile="../config/2_AttitudeControl.txt";
 
 #include "MavlinkNode/MavlinkNode.h"
 shared_ptr<MavlinkNode> mlNode;
@@ -63,8 +65,7 @@ int main(int argcp, char **argv)
     fclose(f);
   }
 
-  LoadScenario(_scenarioFile);
- 
+  LoadScenario(_scenarioFile); 
   glutTimerFunc(1,&OnTimer,0);
   
   glutMainLoop();

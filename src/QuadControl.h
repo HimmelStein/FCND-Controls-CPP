@@ -24,11 +24,18 @@ public:
 
   // returns desired moments
   V3F BodyRateControl(V3F pqrCmd, V3F pqr);
-
+    
+    // tuning
+    float get_current_par(string fname, float maxNum, float delta);
+    // tuning
+    float get_par(string fname);
+    void write_par(string fname, float par);
+    
   // returns a desired roll and pitch rate 
   V3F RollPitchControl(V3F accelCmd, Quaternion<float> attitude, float collThrustCmd);
 
-  float AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion<float> attitude, float accelZCmd, float dt);
+  float AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion<float> attitude,
+                        float accelZCmd, float dt);
 
   // -------------- PARAMETERS --------------
 
