@@ -414,10 +414,7 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
     cout<<"R(2,2):"<<R(2,2)<<"------thrust:"<<thrust<<"\n";
     cout<<"------------mass*CONST_GRAVITY:"<<mass*CONST_GRAVITY<<"\n";
   /////////////////////////////// END STUDENT CODE ////////////////////////////
-<<<<<<< HEAD
-=======
-  
->>>>>>> 23c97a6c65e3aa8a06536ec4b784fa3b4298f4b1
+
   return thrust;
 }
 
@@ -449,15 +446,8 @@ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel
   // Make sure to _add_, not simply replace, the result of your controller
   // to this variable
   V3F accelCmd = accelCmdFF;
-<<<<<<< HEAD
-=======
-
-  ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
-
-  
->>>>>>> 23c97a6c65e3aa8a06536ec4b784fa3b4298f4b1
-
-  ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+ 
+    ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
     
     // kpPosXY
     /*
