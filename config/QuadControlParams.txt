@@ -20,58 +20,64 @@ minMotorThrust = .001
 minMotorThrust = .1
 maxMotorThrust = 4.5
 
-# Position control gains
-<<<<<<< HEAD
+# Position control gains 1
+## 2_AttitudeControl 2~4
+kpPosXY = 2
 ## 3_PositionControl
-kpPosXY = 2.7849
-# 4_Nonidealities
-kpPosXY = 2.74508
+## 4_Nonidealities
+#kpPosXY = 2.74508
 # 5_TrajectoryFollow 5.73127 5.28037
 
-## 3_PositionControl
-kpPosZ = 3.7799
+## 2_AttitudeControl 2~4
+kpPosZ = 3
+## 3_PositionControl 1
 # 4_Nonidealities
-kpPosZ = 340
+#kpPosZ = 340
 # 5_TrajectoryFollow
 
 
 ##
-# 4_Nonidealities
-KiPosZ = 600
+# 4_Nonidealities 40 ~ 80
+KiPosZ = 40
 # 5_TrajectoryFollow
 
-# Velocity control gains 
+# Velocity control gains 8~16
+## 2_AttitudeControl
+kpVelXY = 8
 ## 3_PositionControl
- kpVelXY = 1.2998
 # 4_Nonidealities
-kpVelXY = 1.57
+#kpVelXY = 1.57
 # 5_TrajectoryFollow 3.37604
 
-## 3_PositionControl
-kpVelZ = 16
+## 2_AttitudeControl 8~16
+kpVelZ = 10
+## 3_PositionControl 4
 # 4_Nonidealities
-kpVelZ = 70
+#kpVelZ = 70
 # 5_TrajectoryFollow
- 
 
-# Angle control gains
-## 3_PositionControl
+
+# Angle control gains 5
+## 2_AttitudeControl 10~20, the less, the better
 kpBank = 10
+## 3_PositionControl
 # 4_Nonidealities
-kpBank = 7
+#kpBank = 7
 # 5_TrajectoryFollow
 
-## 3_PositionControl
+## 2_AttitudeControl 2~4
 kpYaw = 2
+## 3_PositionControl 1
 ##4_Nonidealities
-kpYaw = 10
+#kpYaw = 10
 ## 5_TrajectoryFollow
 
-# Angle rate gains
+# Angle rate gains 46~92, 46~92, 10~20
+## 2_AttitudeControl, 46~92, 46~92 ,10~20
+kpPQR = 75, 75, 10
 ## 3_PositionControl
-kpPQR = 30, 30 , 5
 ## 4_Nonidealities
-kpPQR = 145, 37, 5
+#kpPQR = 145, 37, 5
 # 5_TrajectoryFollow 
 
 # limits

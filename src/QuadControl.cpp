@@ -95,15 +95,15 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
     
     float Mx = momentCmd.x;
     float My = momentCmd.y;
-    float Mz = momentCmd.z;
+    float Mz = -momentCmd.z;
     float Ftotal = collThrustCmd ;
     
     cout << " Mx: "<< Mx <<"\n";
-    cout << " My:"<< Mx <<"\n";
+    cout << " My:"<< My <<"\n";
     cout << " Mz:"<< Mz <<"\n";
     cout << "f_total:"<< Ftotal <<"\n";
     
-    float l = L/1.414f;
+    float l = L/sqrt(2);
     
     float f1 = (Mx/l  + My/l  + Mz/kappa + Ftotal) / 4.f;
     float f2 = (-Mx/l  + My/l  - Mz/kappa + Ftotal) / 4.f;
@@ -454,8 +454,8 @@ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel
     float delta1 = 0.0001;
     kpPosXY = get_par("/Users/tdong/git/FCND-Controls-CPP/src/kpPosXY.txt");
     cout<<"=============kpPosXY:"<<kpPosXY<<"\n";
-    if (kpPosXY<=10 ){
-        write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpPosXY.txt", kpPosXY+delta1);
+    if (kpPosXY<=4 ){
+        write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpPosXY.txt", kpPosXY+delta1*5);
     }else{
         exit(0);
     }
@@ -473,16 +473,18 @@ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel
     }
     */
     V3F pd = V3F(kpPosXY, kpVelXY, 1.f);
+    /*
     posCmd = -posCmd;
     pos = -pos;
     velCmd = -velCmd;
-    vel = -vel; 
+    vel = -vel;
+     */
     
     V3F deltaX = V3F((posCmd-pos)[0], (velCmd-vel)[0], accelCmd[0]);
     cout<<"posCmd.x:"<<posCmd[0]<<" pos.x:"<< pos[0]<< " deltaX:"<<deltaX[0] <<"\n";
     cout<<"velCmd.x:"<<velCmd[0]<<" vel.x:"<< vel[0]<< " deltaV:"<<deltaX[1] <<"\n";
     V3F deltaY = V3F((posCmd-pos)[1], (velCmd-vel)[1], accelCmd[1]);
-    cout<<"posCmd.y:"<<posCmd[1]<<" pos.y:"<< pos[1]<< " deltaY:"<<deltaY[1] <<"\n";
+    cout<<"posCmd.y:"<<posCmd[1]<<" pos.y:"<< pos[1]<< " deltaY:"<<deltaY[0] <<"\n";
     cout<<"velCmd.y:"<<velCmd[1]<<" vel.y:"<< vel[1]<<"\n";
     accelCmd = V3F(pd.dot(deltaX), pd.dot(deltaY), 0.f);
     cout<<"accelCmd.x:"<<pd.dot(deltaX)<<" accelCmd.y:"<<pd.dot(deltaY)<<"\n";
@@ -543,10 +545,10 @@ VehicleCommand QuadControl::RunControl(float dt, float simTime)
     
   // reserve some thrust margin for angle control
   float thrustMargin = .1f*(maxMotorThrust - minMotorThrust);
-  //collThrustCmd = CONSTRAIN(collThrustCmd, (minMotorThrust+ thrustMargin)*4.f, (maxMotorThrust-thrustMargin)*4.f);
-  //cout<<"miniMortorThrust:"<<(minMotorThrust+ thrustMargin)*4.f<<"\n";
-  collThrustCmd = CONSTRAIN(collThrustCmd, 1.5, (maxMotorThrust-thrustMargin)*4.f);
-  cout<<"miniMortorThrust:"<<1.5<<"\n";
+  collThrustCmd = CONSTRAIN(collThrustCmd, (minMotorThrust+ thrustMargin)*4.f, (maxMotorThrust-thrustMargin)*4.f);
+  cout<<"miniMortorThrust:"<<(minMotorThrust+ thrustMargin)*4.f<<"\n";
+  //collThrustCmd = CONSTRAIN(collThrustCmd, 1.5, (maxMotorThrust-thrustMargin)*4.f);
+  //cout<<"miniMortorThrust:"<<1.5<<"\n";
   cout<<"collThrustCmd:"<<collThrustCmd<<"\n";
     
   V3F desAcc = LateralPositionControl(curTrajPoint.position, curTrajPoint.velocity, estPos, estVel, curTrajPoint.accel);
