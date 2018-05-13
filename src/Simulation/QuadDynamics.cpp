@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Common.h"
 #include "QuadDynamics.h"
 #include "Math/Random.h"
@@ -204,6 +205,7 @@ void QuadDynamics::Dynamics(float dt, float simTime, V3F external_force, V3F ext
     motorCmdsN(i) = curCmd.desiredThrustsN[i] + randomMotorForceMag * ran1_inRange(-1.f, 1.f, idum);
   }
 
+    cout <<"+motorCmdsN:"<<motorCmdsN(0)<<" "<<motorCmdsN(1)<<" "<<motorCmdsN(2)<<" "<<motorCmdsN(3)<<"\n";
   // Prop dynamics, props cannot change thrusts in a non continuous manner
   for (int m = 0; m < 4; m++){
     if (motorCmdsN(m) >= motorCmdsOld(m))
@@ -217,6 +219,8 @@ void QuadDynamics::Dynamics(float dt, float simTime, V3F external_force, V3F ext
   }
 
   float total_thrust = motorCmdsN(0) + motorCmdsN(1) + motorCmdsN(2) + motorCmdsN(3);
+    cout <<"+total_thrust:"<<total_thrust<<"\n";
+    
   V3F oldPos;
   V3F force_body_frame(0.f,0.f,-total_thrust);
   float half_dt = dt/2;

@@ -105,10 +105,13 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
     
     float l = L/sqrt(2);
     
-    float f1 = (Mx/l  + My/l  + Mz/kappa + Ftotal) / 4.f;
-    float f2 = (-Mx/l  + My/l  - Mz/kappa + Ftotal) / 4.f;
-    float f3 = (Mx/l  - My/l  - Mz/kappa + Ftotal) / 4.f;
-    float f4 = (-Mx/l  - My/l  + Mz/kappa + Ftotal) / 4.f;
+    
+    float f1 = (Mx/l  + My/l  - Mz/kappa + Ftotal) / 4.f;
+    float f2 = (-Mx/l  + My/l  + Mz/kappa + Ftotal) / 4.f;
+    float f3 = (Mx/l  - My/l  + Mz/kappa + Ftotal) / 4.f;
+    float f4 = (-Mx/l  - My/l  - Mz/kappa + Ftotal) / 4.f;
+     
+    
     
     cmd.desiredThrustsN[0] = f1; // front left
     cmd.desiredThrustsN[1] = f2; // front right
@@ -244,16 +247,10 @@ V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
     */
     // ***** end of tuning kp, kq *****
     
-    // log file for tuning
-    string logName = "/Users/tdong/git/FCND-Controls-CPP/src/log_kp_pq.txt";
-    ofstream oLFile;
-    oLFile.open(logName, ios::out | ios::app);
-    oLFile << "kp:"<< kpPQR[0]<<" kq:" << kpPQR[1] << std::endl;
-    
-    //----
-    
-    
-    V3F u_pqr = kpPQR*(pqrCmd - pqr);
+    V3F delta = pqrCmd - pqr;
+    //delta[0] = CONSTRAIN(delta[0], -maxTiltAngle, maxTiltAngle);
+    //delta[1] = CONSTRAIN(delta[1], -maxTiltAngle, maxTiltAngle);
+    V3F u_pqr = kpPQR*delta;
     V3F I_xyz = V3F(Ixx, Iyy, -Izz);
     momentCmd = I_xyz * u_pqr;
      
@@ -297,18 +294,18 @@ V3F QuadControl::RollPitchControl(V3F accelCmd, Quaternion<float> attitude, floa
      */
  
     V3F bc = accelCmd/collThrustCmd;
+    
+    float acceleration = collThrustCmd/mass;
+    float target02 = CONSTRAIN(accelCmd.x/acceleration, -maxTiltAngle, maxTiltAngle);
+    float target12 = CONSTRAIN(accelCmd.y/acceleration, -maxTiltAngle, maxTiltAngle);
+    bc = V3F(target02, target12, bc[2]);
+    
     V3F ba = V3F(R(0,2) , R(1,2), 0);
     V3F b_dot_c = kpBank * (bc - ba);
     V3F c0 = V3F(R(1,0), -R(0,0), 0);
     V3F c1 = V3F(R(1,1), -R(0,1), 0);
     float pitch = c1.dot(b_dot_c)/R(2,2);
-    float pitchDegree = 7.f;
-    if (pitch> pitchDegree){
-        pitch = pitchDegree;
-    };
-    if (pitch < -pitchDegree){
-        pitch = -pitchDegree;
-    };
+    
     pqrCmd = V3F(c0.dot(b_dot_c)/R(2,2), pitch, 0);
     cout<<"pqrCmd pictch:"<< pitch <<", "<<c1.dot(b_dot_c)/R(2,2)<< "\n";
  
@@ -381,23 +378,19 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
      */
     cout<<">>>posZCmd:"<<posZCmd<<" posZ:"<<posZ<<"\n";
     cout<<">>>velZCmd:"<<velZCmd<<" velZ:"<<velZ<<"\n";
-    /*
-    posZ = -posZ;
-    posZCmd = -posZCmd;
-    if (velZ > 0){
-        velZ = fmodf(velZ, maxAscentRate);
-    }else{
-        velZ = fmodf(-velZ, maxDescentRate);
-        velZCmd = -velZCmd;
-    }
-    */
-    //posZ=2.00562;
-
     
+    if (velZ < 0){
+        velZ = - fmodf(-velZ, maxAscentRate);
+    }else{
+        velZ = - fmodf(-velZ, maxDescentRate);
+    }
+    
+     
    cout<<"kpPosZ:"<<kpPosZ<<"\n";
    cout<<"kpVelZ:"<<kpVelZ<<"\n";
     V3F zk = V3F(kpPosZ, kpVelZ, 1);
     V3F delta = V3F(posZCmd-posZ, (velZCmd-velZ), accelZCmd);
+    
    cout<<"posZCmd:"<<posZCmd<<" posZ:"<<posZ<<"\n";
    cout<<"velZCmd:"<<velZCmd<<" velZ:"<<velZ<<"\n";
     float u_bar_1 = zk.dot(delta);
@@ -409,7 +402,9 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
     u_bar_1 += this->integratedAltitudeError * KiPosZ;
     cout<<"u_bar_1:"<<u_bar_1<<"\n";
     
-    thrust = -mass*(u_bar_1+CONST_GRAVITY)/R(2,2);
+    //thrust = -mass*(u_bar_1+CONST_GRAVITY)/R(2,2);
+    //thrust = mass*(CONST_GRAVITY-u_bar_1)/R(2,2);
+    thrust = -mass*(u_bar_1-CONST_GRAVITY)/R(2,2);
     
     cout<<"R(2,2):"<<R(2,2)<<"------thrust:"<<thrust<<"\n";
     cout<<"------------mass*CONST_GRAVITY:"<<mass*CONST_GRAVITY<<"\n";
@@ -473,21 +468,21 @@ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel
     }
     */
     V3F pd = V3F(kpPosXY, kpVelXY, 1.f);
-    /*
-    posCmd = -posCmd;
-    pos = -pos;
-    velCmd = -velCmd;
+    posCmd  = -posCmd;
+    pos  = -pos;
+    velCmd  = -velCmd;
     vel = -vel;
-     */
+     
     
-    V3F deltaX = V3F((posCmd-pos)[0], (velCmd-vel)[0], accelCmd[0]);
+    V3F deltaX = V3F((posCmd-pos)[0], CONSTRAIN((velCmd-vel)[0], -maxSpeedXY, maxSpeedXY), accelCmd[0]);
     cout<<"posCmd.x:"<<posCmd[0]<<" pos.x:"<< pos[0]<< " deltaX:"<<deltaX[0] <<"\n";
     cout<<"velCmd.x:"<<velCmd[0]<<" vel.x:"<< vel[0]<< " deltaV:"<<deltaX[1] <<"\n";
-    V3F deltaY = V3F((posCmd-pos)[1], (velCmd-vel)[1], accelCmd[1]);
+    V3F deltaY = V3F((posCmd-pos)[1], CONSTRAIN((velCmd-vel)[1], -maxSpeedXY, maxSpeedXY), accelCmd[1]);
     cout<<"posCmd.y:"<<posCmd[1]<<" pos.y:"<< pos[1]<< " deltaY:"<<deltaY[0] <<"\n";
     cout<<"velCmd.y:"<<velCmd[1]<<" vel.y:"<< vel[1]<<"\n";
+    
     accelCmd = V3F(pd.dot(deltaX), pd.dot(deltaY), 0.f);
-    cout<<"accelCmd.x:"<<pd.dot(deltaX)<<" accelCmd.y:"<<pd.dot(deltaY)<<"\n";
+    cout<<"*******accelCmd.x:"<<accelCmd.x<<" accelCmd.y:"<<accelCmd.y<<"\n";
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
   return accelCmd;
@@ -506,8 +501,7 @@ float QuadControl::YawControl(float yawCmd, float yaw)
   //  - use fmodf(foo,b) to unwrap a radian angle measure float foo to range [0,b]. 
   //  - use the yaw control gain parameter kpYaw
      
-    float yawRateCmd=0;
-    
+    float yawRateCmd=0; 
     /*
     yawCmd = -yawCmd;
     yaw = -yaw ;

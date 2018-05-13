@@ -9,7 +9,7 @@
 UseIdealEstimator=1
 
 # Physical properties
-Mass = 0.24
+Mass = 0.35
 
 L = 0.17
 Ixx = 0.0023
@@ -22,51 +22,49 @@ maxMotorThrust = 4.5
 
 # Position control gains 1
 ## 2_AttitudeControl 2~4
-kpPosXY = 2
+kpPosXY = 20
 ## 3_PositionControl
 ## 4_Nonidealities
-#kpPosXY = 2.74508
 # 5_TrajectoryFollow 5.73127 5.28037
 
 ## 2_AttitudeControl 2~4
-kpPosZ = 3
+kpPosZ = 25
 ## 3_PositionControl 1
 # 4_Nonidealities
-#kpPosZ = 340
+#kpPosZ = 300
 # 5_TrajectoryFollow
-
 
 ##
 # 4_Nonidealities 40 ~ 80
-KiPosZ = 40
+KiPosZ = 560
 # 5_TrajectoryFollow
 
 # Velocity control gains 8~16
 ## 2_AttitudeControl
-kpVelXY = 8
+kpVelXY = 9.8
 ## 3_PositionControl
 # 4_Nonidealities
 #kpVelXY = 1.57
 # 5_TrajectoryFollow 3.37604
 
 ## 2_AttitudeControl 8~16
-kpVelZ = 10
+kpVelZ = 45
 ## 3_PositionControl 4
 # 4_Nonidealities
-#kpVelZ = 70
+# kpVelZ = 82
 # 5_TrajectoryFollow
 
 
 # Angle control gains 5
 ## 2_AttitudeControl 10~20, the less, the better
-kpBank = 10
+kpBank = 12
 ## 3_PositionControl
 # 4_Nonidealities
-#kpBank = 7
+#kpBank = 10
 # 5_TrajectoryFollow
 
 ## 2_AttitudeControl 2~4
-kpYaw = 2
+kpYaw = 10
 ## 3_PositionControl 1
 ##4_Nonidealities
 #kpYaw = 10
@@ -74,7 +72,7 @@ kpYaw = 2
 
 # Angle rate gains 46~92, 46~92, 10~20
 ## 2_AttitudeControl, 46~92, 46~92 ,10~20
-kpPQR = 75, 75, 10
+kpPQR = 92, 75, 15
 ## 3_PositionControl
 ## 4_Nonidealities
 #kpPQR = 145, 37, 5
