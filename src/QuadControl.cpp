@@ -76,17 +76,6 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
     
-    /*
-    mass = get_par("/Users/tdong/git/FCND-Controls-CPP/src/mass.txt");
-    float delta = 0.00001;
-    cout<<"=============mass:"<< mass<< "\n";
-    if (mass<100){
-        write_par("/Users/tdong/git/FCND-Controls-CPP/src/mass.txt", mass+delta);
-    }else{
-        exit(0);
-    }
-    */
-     
   cmd.desiredThrustsN[0] = mass * 9.81f / 4.f; // front left
   cmd.desiredThrustsN[1] = mass * 9.81f / 4.f; // front right
   cmd.desiredThrustsN[2] = mass * 9.81f / 4.f; // rear left
@@ -128,47 +117,6 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
   return cmd;
 }
 
-float QuadControl::get_current_par(string fname, float maxNum, float delta){
-    ifstream iFname;
-    string par;
-    float parNum;
-    iFname.open(fname); // The name of the file you set up.
-    iFname >> par;
-    
-    parNum = atof(par.c_str());
-    if (parNum >= maxNum){
-        exit(0);
-    }
-    
-    ofstream oFname;
-    oFname.open(fname);
-    oFname<< parNum + delta;
-    
-    oFname.close();
-    iFname.close();
-    return parNum;
-}
-
-float QuadControl::get_par(string fname){
-    ifstream iFname;
-    string par;
-    float parNum;
-    iFname.open(fname); // The name of the file you set up.
-    iFname >> par;
-    
-    parNum = atof(par.c_str());
-    iFname.close();
-    return parNum;
-}
-
-void QuadControl::write_par(string fname, float par){
-    ofstream oFname;
-    oFname.open(fname);
-    oFname<< par;
-    
-    oFname.close();
-}
-
 
 V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
 {
@@ -187,69 +135,9 @@ V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
   V3F momentCmd;
 
   ////////////////////////////// BEGIN STUDENT CODE //////////////////////////
-   
-    // kp
-    /*
-    float delta = 0.0001;
-    kpPQR[0] = get_par("/Users/tdong/git/FCND-Controls-CPP/src/kpp.txt");
-    cout<<"=============kp:"<< kpPQR[0]<<"=====kq:"<<kpPQR[1]<< "\n";
-    if (kpPQR[0]<=92){
-        write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpp.txt", kpPQR[0]+delta);
-    }else{
-        exit(0);
-    }
-    */
     
-    // kq
- 
-    /*
-    
-     float delta0 = 0.0001;
-     kpPQR[1] = get_par("/Users/tdong/git/FCND-Controls-CPP/src/kpq.txt");
-     cout<<"=============kp:"<< kpPQR[0]<<"=====kq:"<<kpPQR[1]<< "\n";
-     if (kpPQR[1]<=92){
-     write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpq.txt", kpPQR[1]+delta0);
-     }else{
-     exit(0);
-     }
-    */
-    
-    /*
-     
-     float delta = 0.00001;
-     kpPQR[2] = get_par("/Users/tdong/git/FCND-Controls-CPP/src/kpr.txt");
-     cout<<"=============kp:"<< kpPQR[2]<<"=====kq:"<<kpPQR[1]<<"=====kr:"<<kpPQR[2]<< "\n";
-     if (kpPQR[2]<0.9){
-     write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpr.txt", kpPQR[2]+delta);
-     }else{
-     exit(0);
-     }
-     */
-
- 
-    
-    // ***** beginning of tunning kp, kq *****
-    /*
-    kpPQR[0] = get_par("/Users/tdong/git/FCND-Controls-CPP/src/kpp.txt");
-    cout<<"=============kp:"<< kpPQR[0];
-    kpPQR[1] = get_par("/Users/tdong/git/FCND-Controls-CPP/src/kpq.txt");
-    cout<<"=============kq:"<< kpPQR[1]<<"\n";
-    float maxNum = 1000;
-    float delta = 0.001;
-    if (kpPQR[1]< 130){
-        write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpq.txt", kpPQR[1]+delta);
-    }else if (kpPQR[0]<450){
-        write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpp.txt", kpPQR[0]+0.1);
-        write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpq.txt", 100);
-    }else{
-        exit(0);
-    }
-    */
-    // ***** end of tuning kp, kq *****
     
     V3F delta = pqrCmd - pqr;
-    //delta[0] = CONSTRAIN(delta[0], -maxTiltAngle, maxTiltAngle);
-    //delta[1] = CONSTRAIN(delta[1], -maxTiltAngle, maxTiltAngle);
     V3F u_pqr = kpPQR*delta;
     V3F I_xyz = V3F(Ixx, Iyy, -Izz);
     momentCmd = I_xyz * u_pqr;
@@ -281,17 +169,7 @@ V3F QuadControl::RollPitchControl(V3F accelCmd, Quaternion<float> attitude, floa
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
-    // kpBank
-    /*
-     float delta = 0.0001;
-     kpBank = get_par("/Users/tdong/git/FCND-Controls-CPP/src/kpBank.txt");
-     cout<<"=============kpBank:"<<kpBank<<"\n";
-     if (kpBank<=20){
-     write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpBank.txt", kpBank+delta);
-     }else{
-     exit(0);
-     }
-     */
+    
  
     V3F bc = accelCmd/collThrustCmd;
     
@@ -340,42 +218,7 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
  
-    // kpPosZ
-    /*
-    cout<<"==mass:"<<mass<<"\n";
-     float delta0 = 0.0001;
-     kpPosZ = get_par("/Users/tdong/git/FCND-Controls-CPP/src/kpPosZ.txt");
-     cout<<"=============kpPosZ:"<<kpPosZ<<"\n";
-     if (kpPosZ<=4){
-     write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpPosZ.txt", kpPosZ+delta0);
-     }else{
-     exit(0);
-     }
-     */
     
-    // kpVelZ
-    /*
-    float delta1 = 0.0001;
-    kpVelZ = get_par("/Users/tdong/git/FCND-Controls-CPP/src/kpVelZ.txt");
-    cout<<"=============kpVelZ:"<<kpVelZ<<"\n";
-    if (kpVelZ<=16){
-        write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpVelZ.txt", kpVelZ+delta1);
-    }else{
-        exit(0);
-    }
-    */
-    
-    // KiPosZ
-    /*
-     float delta2 = 0.0001;
-     KiPosZ = get_par("/Users/tdong/git/FCND-Controls-CPP/src/KiPosZ.txt");
-     cout<<"=============KiPosZ:"<<KiPosZ<<"\n";
-     if (KiPosZ<=1000){
-     write_par("/Users/tdong/git/FCND-Controls-CPP/src/KiPosZ.txt", KiPosZ+delta2);
-     }else{
-     exit(0);
-     }
-     */
     cout<<">>>posZCmd:"<<posZCmd<<" posZ:"<<posZ<<"\n";
     cout<<">>>velZCmd:"<<velZCmd<<" velZ:"<<velZ<<"\n";
     
@@ -402,8 +245,6 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
     u_bar_1 += this->integratedAltitudeError * KiPosZ;
     cout<<"u_bar_1:"<<u_bar_1<<"\n";
     
-    //thrust = -mass*(u_bar_1+CONST_GRAVITY)/R(2,2);
-    //thrust = mass*(CONST_GRAVITY-u_bar_1)/R(2,2);
     thrust = -mass*(u_bar_1-CONST_GRAVITY)/R(2,2);
     
     cout<<"R(2,2):"<<R(2,2)<<"------thrust:"<<thrust<<"\n";
@@ -444,29 +285,7 @@ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel
  
     ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
     
-    // kpPosXY
-    /*
-    float delta1 = 0.0001;
-    kpPosXY = get_par("/Users/tdong/git/FCND-Controls-CPP/src/kpPosXY.txt");
-    cout<<"=============kpPosXY:"<<kpPosXY<<"\n";
-    if (kpPosXY<=4 ){
-        write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpPosXY.txt", kpPosXY+delta1*5);
-    }else{
-        exit(0);
-    }
-    */
     
-    // kpVelXY
-    /*
-    float delta2 = 0.00001;
-    kpVelXY = get_par("/Users/tdong/git/FCND-Controls-CPP/src/kpVelXY.txt");
-    cout<<"=============kpVelXY:"<<kpVelXY<<"\n";
-    if (kpVelXY<=10){
-        write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpVelXY.txt", kpVelXY+delta2*2);
-    }else{
-        exit(0);
-    }
-    */
     V3F pd = V3F(kpPosXY, kpVelXY, 1.f);
     posCmd  = -posCmd;
     pos  = -pos;
@@ -502,25 +321,11 @@ float QuadControl::YawControl(float yawCmd, float yaw)
   //  - use the yaw control gain parameter kpYaw
      
     float yawRateCmd=0; 
-    /*
-    yawCmd = -yawCmd;
-    yaw = -yaw ;
-    */
+    
     cout<<"++++kpYaw:"<< kpYaw<< " yawCmd:"<< yawCmd<<" yaw:"<<yaw<<"\n";
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
-    // kpYaw
-    /*
-     float delta1 = 0.00001;
-     kpYaw = get_par("/Users/tdong/git/FCND-Controls-CPP/src/kpYaw.txt");
-     cout<<"=============kpYaw:"<<kpYaw<<"\n";
-     if (kpYaw<90){
-     write_par("/Users/tdong/git/FCND-Controls-CPP/src/kpYaw.txt", kpYaw+delta1);
-     }else{
-     exit(0);
-     }
-     cout<<"kpYaw:"<< kpYaw<< " yawCmd:"<< yawCmd<<" yaw:"<<yaw<<"\n";
-     */
+    
     yawRateCmd = kpYaw * (yawCmd - yaw);
     cout<<"yawRateCmd:"<<yawRateCmd<<"\n";
     
@@ -541,9 +346,7 @@ VehicleCommand QuadControl::RunControl(float dt, float simTime)
   float thrustMargin = .1f*(maxMotorThrust - minMotorThrust);
   collThrustCmd = CONSTRAIN(collThrustCmd, (minMotorThrust+ thrustMargin)*4.f, (maxMotorThrust-thrustMargin)*4.f);
   cout<<"miniMortorThrust:"<<(minMotorThrust+ thrustMargin)*4.f<<"\n";
-  //collThrustCmd = CONSTRAIN(collThrustCmd, 1.5, (maxMotorThrust-thrustMargin)*4.f);
-  //cout<<"miniMortorThrust:"<<1.5<<"\n";
-  cout<<"collThrustCmd:"<<collThrustCmd<<"\n";
+   cout<<"collThrustCmd:"<<collThrustCmd<<"\n";
     
   V3F desAcc = LateralPositionControl(curTrajPoint.position, curTrajPoint.velocity, estPos, estVel, curTrajPoint.accel);
   
