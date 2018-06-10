@@ -293,10 +293,10 @@ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel
     vel = -vel;
      
     
-    V3F deltaX = V3F((posCmd-pos)[0], CONSTRAIN((velCmd-vel)[0], -maxSpeedXY, maxSpeedXY), accelCmd[0]);
+    V3F deltaX = V3F((posCmd-pos)[0], CONSTRAIN((velCmd-vel)[0], -maxSpeedXY, maxSpeedXY), accelCmdFF[0]);
     cout<<"posCmd.x:"<<posCmd[0]<<" pos.x:"<< pos[0]<< " deltaX:"<<deltaX[0] <<"\n";
     cout<<"velCmd.x:"<<velCmd[0]<<" vel.x:"<< vel[0]<< " deltaV:"<<deltaX[1] <<"\n";
-    V3F deltaY = V3F((posCmd-pos)[1], CONSTRAIN((velCmd-vel)[1], -maxSpeedXY, maxSpeedXY), accelCmd[1]);
+    V3F deltaY = V3F((posCmd-pos)[1], CONSTRAIN((velCmd-vel)[1], -maxSpeedXY, maxSpeedXY), accelCmdFF[1]);
     cout<<"posCmd.y:"<<posCmd[1]<<" pos.y:"<< pos[1]<< " deltaY:"<<deltaY[0] <<"\n";
     cout<<"velCmd.y:"<<velCmd[1]<<" vel.y:"<< vel[1]<<"\n";
     
